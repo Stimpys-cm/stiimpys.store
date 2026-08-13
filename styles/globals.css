@@ -1,0 +1,185 @@
+/* ============================================================
+   styles/globals.css
+   Sistema de diseño migrado 1:1 del repo original
+   (Catalogodeunbazar). Mismos tokens, tipografías y estética:
+   crema + navy + acento azul, Bebas Neue + DM Sans, píldoras
+   redondeadas y sombras azules suaves.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --black: #1a1f2e;
+  --white: #f7f4ef;
+  --accent: #2d6be4;
+  --accent2: #4a90d9;
+  --gray: #f0ece4;
+  --mid: #e8e2d8;
+  --card: #faf8f4;
+  --border: #d4cfc6;
+  --muted: #8a8178;
+  --text2: #6b6560;
+  --text-dark: #1a1f2e;
+  --danger: #e05c5c;
+  --success: #2e8b57;
+  --whatsapp: #25D366;
+
+  --bg-gradient: linear-gradient(135deg, #f7f4ef 0%, #edf2fb 50%, #e8e2d8 100%);
+  --hero-gradient: linear-gradient(160deg, #1a1f2e 0%, #2d4a7a 60%, #4a90d9 100%);
+  --card-gradient: linear-gradient(145deg, #faf8f4 0%, #edf2fb 100%);
+  --accent-gradient: linear-gradient(135deg, #2d6be4 0%, #4a90d9 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: 'DM Sans', sans-serif; cursor: pointer; }
+.hidden { display: none !important; }
+
+/* ── Tipografía utilitaria ─────────────────────────────────── */
+.display { font-family: 'Bebas Neue', sans-serif; letter-spacing: .03em; }
+.eyebrow {
+  font-size: 11px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--accent); font-weight: 600;
+}
+
+/* ── Botones ───────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: 11px 22px; border-radius: 30px; border: none; transition: all .2s;
+}
+.btn-primary {
+  background: var(--accent-gradient); color: #fff;
+  box-shadow: 0 3px 14px rgba(45,107,228,.28);
+}
+.btn-primary:hover { opacity: .9; box-shadow: 0 5px 20px rgba(45,107,228,.4); }
+.btn-ghost {
+  background: none; color: var(--muted);
+  border: 1.5px solid var(--border);
+}
+.btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
+.btn-danger { background: var(--danger); color: #fff; }
+
+/* ── Header compartido ─────────────────────────────────────── */
+.app-header {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(247,244,239,.96); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem; height: 64px;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  box-shadow: 0 1px 12px rgba(45,107,228,.06);
+}
+.app-header .logo {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem;
+  letter-spacing: .05em; color: var(--black);
+}
+.app-header .logo span { color: var(--accent); }
+.header-nav { display: flex; align-items: center; gap: 22px; }
+.header-nav a {
+  font-size: 12px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text-dark); transition: color .2s;
+}
+.header-nav a:hover { color: var(--accent); }
+
+/* ── Cards de producto (idénticas al original) ─────────────── */
+.grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 36px; padding: 3rem; max-width: 1400px; margin: 0 auto;
+}
+.card {
+  background: #fff; border: 1.5px solid var(--border); border-radius: 20px;
+  box-shadow: 0 3px 18px rgba(45,107,228,.07);
+  transition: transform .25s cubic-bezier(.4,0,.2,1), box-shadow .25s ease;
+  display: flex; flex-direction: column; overflow: hidden; cursor: pointer;
+}
+.card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(45,107,228,.15); }
+.card:hover .card-img img { transform: scale(1.05); }
+.card-img {
+  margin: 14px 14px 0; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4;
+  background: linear-gradient(145deg, #edf2fb, #e8e2d8); position: relative;
+}
+.card-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .4s cubic-bezier(.4,0,.2,1);
+}
+.no-photo {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+}
+.brand-tag {
+  position: absolute; top: 10px; left: 10px;
+  background: var(--accent-gradient); color: #fff;
+  font-size: 9px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 8px rgba(45,107,228,.35); z-index: 2;
+}
+.fav-btn {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,.9); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; transition: transform .15s;
+}
+.fav-btn:hover { transform: scale(1.12); }
+.fav-btn.active { color: var(--danger); border-color: var(--danger); }
+.card-body { padding: 1.1rem 1.4rem 1.4rem; display: flex; flex-direction: column; flex: 1; }
+.card-name {
+  font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.cat-chip {
+  font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px;
+  background: rgba(45,107,228,.08); color: var(--accent); border: 1px solid rgba(45,107,228,.15);
+}
+.card-sub { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+.card-price { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .05em; color: var(--accent); line-height: 1; }
+
+/* ── Chips de estado de prenda ─────────────────────────────── */
+.estado-chip { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; }
+.estado-disponible { background: rgba(46,139,87,.12); color: var(--success); }
+.estado-reservado { background: rgba(224,160,60,.14); color: #b8791e; }
+.estado-vendido { background: rgba(224,92,92,.12); color: var(--danger); }
+
+/* ── Panel / tarjetas de contenido ─────────────────────────── */
+.panel {
+  background: #fff; border: 1.5px solid var(--border); border-radius: 16px;
+  box-shadow: 0 3px 18px rgba(45,107,228,.06);
+}
+
+/* ── Toast ─────────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--black); border: 1px solid rgba(45,107,228,.3); color: var(--white);
+  padding: 12px 20px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  border-radius: 6px; z-index: 9999; opacity: 0; transition: opacity .25s; pointer-events: none;
+  box-shadow: 0 4px 20px rgba(45,107,228,.2);
+}
+.toast.show { opacity: 1; }
+
+/* ── Inputs ────────────────────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.field label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.field input, .field select, .field textarea {
+  padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+  background: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-dark);
+  outline: none; transition: border-color .2s, box-shadow .2s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--accent); box-shadow: 0 2px 12px rgba(45,107,228,.12);
+}
+
+@media (max-width: 640px) {
+  .app-header { padding: 0 1.2rem; }
+  .grid { padding: 1.5rem; gap: 20px; }
+}
