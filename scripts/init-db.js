@@ -24,6 +24,8 @@ const {
   reporteIndexes,
   resenaSchema,
   resenaIndexes,
+  compraSchema,
+  compraIndexes,
 } = require('../models/interacciones.model');
 
 const COLECCIONES = [
@@ -33,6 +35,7 @@ const COLECCIONES = [
   { nombre: 'favoritos', schema: favoritoSchema, indexes: favoritoIndexes },
   { nombre: 'reportes', schema: reporteSchema, indexes: reporteIndexes },
   { nombre: 'resenas', schema: resenaSchema, indexes: resenaIndexes },
+  { nombre: 'compras', schema: compraSchema, indexes: compraIndexes },
 ];
 
 async function crearOActualizarColeccion(db, { nombre, schema, indexes }) {

@@ -76,6 +76,33 @@ const resenaIndexes = [
   { key: { tiendaId: 1, createdAt: -1 }, options: {} },
 ];
 
+// Registro de compra: se crea cuando el vendedor marca una prenda
+// como vendida a un usuario concreto. Alimenta el tab "Purchases".
+const compraSchema = {
+  $jsonSchema: {
+    bsonType: 'object',
+    title: 'compra',
+    required: ['prendaId', 'tiendaId', 'compradorId', 'vendedorId', 'precio', 'createdAt'],
+    properties: {
+      _id: { bsonType: 'objectId' },
+      prendaId: { bsonType: 'objectId' },
+      tiendaId: { bsonType: 'objectId' },
+      compradorId: { bsonType: 'objectId' }, // usuario que compró
+      vendedorId: { bsonType: 'objectId' },  // usuario que marcó la venta
+      precio: { bsonType: ['double', 'int'] },
+      tituloPrenda: { bsonType: ['string', 'null'] }, // snapshot
+      fotoPrenda: { bsonType: ['string', 'null'] },
+      resenada: { bsonType: 'bool' }, // si el comprador ya dejó reseña
+      createdAt: { bsonType: 'date' },
+    },
+  },
+};
+const compraIndexes = [
+  { key: { compradorId: 1, createdAt: -1 }, options: {} },
+  { key: { tiendaId: 1, createdAt: -1 }, options: {} },
+  { key: { prendaId: 1 }, options: {} },
+];
+
 module.exports = {
   favoritoSchema,
   favoritoIndexes,
@@ -83,4 +110,6 @@ module.exports = {
   reporteIndexes,
   resenaSchema,
   resenaIndexes,
+  compraSchema,
+  compraIndexes,
 };

@@ -97,12 +97,43 @@ export default function AdminTienda() {
     }
   };
 
+  // Modal de "vender a X usuario"
+  const [ventaModal, setVentaModal] = useState(null); // { prendaId }
+  const [buscar, setBuscar] = useState('');
+  const [resultados, setResultados] = useState([]);
+
   const cambiarEstado = async (prendaId, nuevoEstado) => {
+    // Al marcar como vendida, primero preguntamos a quién
+    if (nuevoEstado === 'vendido') {
+      setVentaModal({ prendaId });
+      setBuscar(''); setResultados([]);
+      return;
+    }
     await fetch('/api/prendas/estado', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prendaId, nuevoEstado }),
     });
+    cargar();
+  };
+
+  // Autocompletar comprador
+  useEffect(() => {
+    if (!ventaModal || buscar.trim().length < 2) { setResultados([]); return; }
+    const t = setTimeout(async () => {
+      const r = await fetch(`/api/usuarios/buscar?q=${encodeURIComponent(buscar)}`);
+      if (r.ok) setResultados(await r.json());
+    }, 300);
+    return () => clearTimeout(t);
+  }, [buscar, ventaModal]);
+
+  const confirmarVenta = async (compradorId) => {
+    await fetch('/api/prendas/estado', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prendaId: ventaModal.prendaId, nuevoEstado: 'vendido', compradorId }),
+    });
+    setVentaModal(null);
     cargar();
   };
 
@@ -195,8 +226,44 @@ export default function AdminTienda() {
           )}
         </div>
       </div>
+
+      {/* ── Modal: vender a un usuario ── */}
+      {ventaModal && (
+        <div style={modalBg} onClick={() => setVentaModal(null)}>
+          <div className="panel" style={modalBox} onClick={(e) => e.stopPropagation()}>
+            <p className="eyebrow" style={{ marginBottom: 8 }}>Marcar como vendida</p>
+            <h3 className="display" style={{ fontSize: '1.6rem', marginBottom: 4 }}>¿A quién se la vendiste?</h3>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
+              Busca al comprador por su usuario. Aparecerá en sus compras.
+            </p>
+
+            <input
+              autoFocus value={buscar} onChange={(e) => setBuscar(e.target.value)}
+              placeholder="Buscar usuario…"
+              style={{ width: '100%', padding: '11px 14px', border: '1.5px solid var(--border)', borderRadius: 10, fontSize: 14, marginBottom: 12 }}
+            />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 220, overflowY: 'auto' }}>
+              {resultados.map((u) => (
+                <button key={u._id} onClick={() => confirmarVenta(u._id)} style={resultRow}>
+                  <div style={{ width: 34, height: 34, borderRadius: '50%', background: u.avatarUrl ? `url(${u.avatarUrl}) center/cover` : 'var(--accent-gradient)' }} />
+                  <span style={{ fontWeight: 600 }}>{u.username}</span>
+                </button>
+              ))}
+              {buscar.length >= 2 && resultados.length === 0 && (
+                <p style={{ fontSize: 12, color: 'var(--muted)', padding: '8px 0' }}>Sin resultados.</p>
+              )}
+            </div>
+
+            <button onClick={() => setVentaModal(null)} className="btn btn-ghost" style={{ width: '100%', marginTop: 16 }}>Cancelar</button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
 const fila = { display: 'flex', alignItems: 'center', gap: 12, padding: '1rem 1.2rem' };
+const modalBg = { position: 'fixed', inset: 0, background: 'rgba(26,31,46,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 500, padding: 20 };
+const modalBox = { width: '100%', maxWidth: 420, padding: '1.8rem' };
+const resultRow = { display: 'flex', alignItems: 'center', gap: 12, padding: '8px 10px', background: 'none', border: '1px solid var(--border)', borderRadius: 10, cursor: 'pointer', textAlign: 'left', fontSize: 14 };
